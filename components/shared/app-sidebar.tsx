@@ -47,7 +47,7 @@ const data = {
       },
       {
         title: "Subscription & Revenue",
-        url: "/admin/dashboard/subscription_revenue",
+        url: "/admin/subscription_revenue",
         icon: User,
       },
       {

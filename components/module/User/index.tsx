@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
@@ -5,17 +6,12 @@ import { useState } from "react";
 import TablePagination from "@/components/ui/core/TablePagination";
 import { YGTable } from "@/components/ui/core/YGTable/BPTable";
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  AlertCircle,
-  Calendar,
-  CircleOff,
-  Eye,
-  Mail,
-  User,
-} from "lucide-react";
+import { AlertCircle, CircleOff, Eye, Search } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import DeleteConfirmOpen from "@/components/ui/core/DeleteConfirmOpen";
+
 import {
   Dialog,
   DialogContent,
@@ -23,7 +19,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+import { Input } from "@/components/ui/input";
 
 // Types
 interface UserData {
@@ -44,6 +48,11 @@ interface MetaData {
 }
 
 const AppUserList = () => {
+  const statusOptions = ["All Status", "Active", "Inactive", "Pending"];
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("All Status");
+
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
   const [open, setOpen] = useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -62,7 +71,6 @@ const AppUserList = () => {
   const confirmDelete = () => {
     if (userToDelete) {
       console.log("Deleting user:", userToDelete);
-      // Add actual delete logic here
       setDeleteConfirmOpen(false);
       setUserToDelete(null);
     }
@@ -88,6 +96,33 @@ const AppUserList = () => {
         joinDate: "2024-01-15",
       },
       {
+        partnerOne: "John Doe",
+        emailOne: "john@example.com",
+        partnerTwo: "Jane Doe",
+        emailTwo: "jane@example.com",
+        status: "Active",
+        dateOfBirth: "1990-05-14",
+        joinDate: "2024-01-15",
+      },
+      {
+        partnerOne: "John Doe",
+        emailOne: "john@example.com",
+        partnerTwo: "Jane Doe",
+        emailTwo: "jane@example.com",
+        status: "Active",
+        dateOfBirth: "1990-05-14",
+        joinDate: "2024-01-15",
+      },
+      {
+        partnerOne: "John Doe",
+        emailOne: "john@example.com",
+        partnerTwo: "Jane Doe",
+        emailTwo: "jane@example.com",
+        status: "Active",
+        dateOfBirth: "1990-05-14",
+        joinDate: "2024-01-15",
+      },
+      {
         partnerOne: "Sarah Khan",
         emailOne: "sarah.k@example.com",
         partnerTwo: "Ali Khan",
@@ -95,33 +130,6 @@ const AppUserList = () => {
         status: "Inactive",
         dateOfBirth: "1998-07-22",
         joinDate: "2024-03-20",
-      },
-      {
-        partnerOne: "Michael Smith",
-        emailOne: "michael.s@example.com",
-        partnerTwo: "Emily Smith",
-        emailTwo: "emily.s@example.com",
-        status: "Active",
-        dateOfBirth: "1995-11-08",
-        joinDate: "2024-06-10",
-      },
-      {
-        partnerOne: "Michael Smith",
-        emailOne: "michael.s@example.com",
-        partnerTwo: "Emily Smith",
-        emailTwo: "emily.s@example.com",
-        status: "Active",
-        dateOfBirth: "1995-11-08",
-        joinDate: "2024-06-10",
-      },
-      {
-        partnerOne: "Michael Smith",
-        emailOne: "michael.s@example.com",
-        partnerTwo: "Emily Smith",
-        emailTwo: "emily.s@example.com",
-        status: "Active",
-        dateOfBirth: "1995-11-08",
-        joinDate: "2024-06-10",
       },
     ],
     meta: {
@@ -158,7 +166,6 @@ const AppUserList = () => {
       header: "Status",
       cell: ({ row }) => (
         <Badge
-          variant={row.original.status === "Active" ? "default" : "secondary"}
           className={
             row.original.status === "Active"
               ? "bg-green-500 hover:bg-green-600"
@@ -185,6 +192,7 @@ const AppUserList = () => {
               <Eye className="h-4 w-4" />
               View
             </Button>
+
             <Button
               onClick={() => handleDeleteClick(user)}
               variant="ghost"
@@ -202,108 +210,48 @@ const AppUserList = () => {
 
   return (
     <div className="space-y-4">
-      <YGTable columns={columns} data={appUserList || []} />
+      <div className="flex items-center gap-4 w-full">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search by name or email..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 py-8 bg-white"
+          />
+        </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="min-w-max py-8">
+              {selectedStatus}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {statusOptions.map((status) => (
+              <DropdownMenuItem
+                key={status}
+                onClick={() => setSelectedStatus(status)}
+                className={selectedStatus === status ? "bg-accent" : ""}
+              >
+                {status}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      <YGTable columns={columns} data={appUserList} />
       <TablePagination totalPage={meta.totalPage} />
 
-      {/* View Profile Modal */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>User Profile</DialogTitle>
-            <p className="text-sm text-muted-foreground">
-              Detailed information about this couple
-            </p>
-          </DialogHeader>
+      {/* View Couple Profile */}
+      <DeleteConfirmOpen
+        selectedUser={selectedUser}
+        open={open}
+        setOpen={setOpen}
+      />
 
-          {selectedUser && (
-            <div className="space-y-6 mt-4">
-              {/* Partners Info */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="border rounded-lg p-4 space-y-3">
-                  <h3 className="text-lg mb-4">Partner 1</h3>
-                  <div className="flex items-center gap-2 text-sm">
-                    <User className="h-4 w-4 text-gray-500" />
-                    <span>{selectedUser.partnerOne}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Mail className="h-4 w-4 text-gray-500" />
-                    <span className="text-gray-600">
-                      {selectedUser.emailOne}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="border rounded-lg p-4 space-y-3">
-                  <h3 className="text-lg mb-4">Partner 2</h3>
-                  <div className="flex items-center gap-2 text-sm">
-                    <User className="h-4 w-4 text-gray-500" />
-                    <span>{selectedUser.partnerTwo}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Mail className="h-4 w-4 text-gray-500" />
-                    <span className="text-gray-600">
-                      {selectedUser.emailTwo}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <Separator />
-
-              {/* Date Information */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="bg-purple-500 text-white p-3 rounded-lg">
-                    <Calendar className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-ls text-gray-500">Join Date</p>
-                    <p className="font-medium">
-                      {selectedUser.joinDate
-                        ? formatDate(selectedUser.joinDate)
-                        : "N/A"}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="bg-purple-500 text-white p-3 rounded-lg">
-                    <Calendar className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-ls text-gray-500">Plan</p>
-                    <p className="font-medium">Monthly</p>
-                  </div>
-                </div>
-              </div>
-
-              <Separator />
-
-              {/* Subscription Status */}
-              <div className="bg-[#f5f5f7] rounded-lg p-4">
-                <h3 className=" mb-3">Subscription Status</h3>
-                <Badge
-                  className={
-                    selectedUser.status === "Active"
-                      ? "bg-green-500 hover:bg-green-600 text-white px-4 py-2 text-sm"
-                      : "bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 text-sm"
-                  }
-                >
-                  {selectedUser.status}
-                </Badge>
-              </div>
-            </div>
-          )}
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              Close
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Confirmation Modal */}
       <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
@@ -316,7 +264,7 @@ const AppUserList = () => {
           {userToDelete && (
             <div className="py-4">
               <p className="text-sm text-gray-600">
-                Are you sure you want to delete the user profile for:
+                Are you sure you want to delete:
               </p>
               <div className="mt-4 p-3 bg-gray-50 rounded-lg">
                 <p className="font-medium">
@@ -336,6 +284,7 @@ const AppUserList = () => {
             >
               Cancel
             </Button>
+
             <Button variant="destructive" onClick={confirmDelete}>
               Delete User
             </Button>
