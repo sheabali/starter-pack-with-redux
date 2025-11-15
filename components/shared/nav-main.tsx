@@ -55,7 +55,7 @@ export function NavMain({
                       tooltip={item.title}
                       className={`${
                         isActive
-                          ? "bg-primary text-white hover:bg-primary/80 hover:text-white "
+                          ? "bg-[#a66dd4] text-white hover:text-white py-6 transition-all duration-200 hover:bg-[#ab5cec]"
                           : ""
                       }`}
                     >
@@ -94,20 +94,22 @@ export function NavMain({
           // If no sub-items, render as a simple link
           return (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton
-                asChild
-                tooltip={item.title}
-                className={`${
-                  isActive
-                    ? "bg-primary text-white hover:bg-primary/90 hover:text-white"
-                    : ""
-                }`}
-              >
-                <Link href={item.url}>
-                  {item.icon && <item.icon className="mr-2 h-5 w-5" />}
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
+              <div className="flex items-center">
+                <SidebarMenuButton
+                  asChild
+                  tooltip={item.title}
+                  className={`${
+                    isActive
+                      ? "bg-[#a66dd4] text-white hover:text-white py-6 transition-all duration-200 hover:bg-[#ab5cec]"
+                      : ""
+                  }`}
+                >
+                  <Link href={item.url}>
+                    {item.icon && <item.icon className="mr-2 h-5 w-5" />}
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </div>
             </SidebarMenuItem>
           );
         })}

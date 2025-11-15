@@ -33,6 +33,7 @@ export function NavUser() {
 
   const router = useRouter();
   const pathname = usePathname();
+  console.log("pathName", pathname);
 
   const handleLogout = async () => {
     dispatch(logout());
@@ -90,6 +91,7 @@ export function NavUser() {
                   alt={data?.firstName ?? "User"}
                   className="h-8 w-8 object-cover rounded-lg"
                 />
+
                 <AvatarFallback className="rounded-lg">
                   <Image
                     src={data?.image || placeholder}

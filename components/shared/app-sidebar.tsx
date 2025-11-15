@@ -6,15 +6,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import Logo from "@/src/assets/logo.png";
-import {
-  HandCoins,
-  Home,
-  InfoIcon,
-  LayoutDashboard,
-  User,
-  Users,
-} from "lucide-react";
+import { Home, LayoutDashboard, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { NavMain } from "./nav-main";
@@ -43,30 +35,19 @@ const data = {
   admin: {
     navMain: [
       {
-        title: "Dashboard",
+        title: "Overview",
         url: "/admin/dashboard",
         icon: LayoutDashboard,
       },
+
       {
         title: "Users",
-        url: "/user/dashboard/users",
-        icon: HandCoins,
-        items: [
-          {
-            title: "Users",
-            url: "/user/dashboard/estimates",
-            icon: Users,
-          },
-          {
-            title: "Pending Users",
-            url: "/user/dashboard/pending-users",
-            icon: InfoIcon,
-          },
-        ],
+        url: "/admin/user",
+        icon: User,
       },
       {
-        title: "Your Profile",
-        url: "/user/dashboard/profile",
+        title: "Subscription & Revenue",
+        url: "/admin/dashboard/subscription_revenue",
         icon: User,
       },
       {
@@ -89,7 +70,7 @@ export default function AppSidebar({ role, ...props }: AppSidebarProps) {
   return (
     <Sidebar
       collapsible="icon"
-      className="w-64 bg-white border-r border-blue-200"
+      className="w-64 bg-[#f9fff8] border-r border-blue-200"
       {...props}
     >
       <SidebarHeader>
@@ -98,7 +79,7 @@ export default function AppSidebar({ role, ...props }: AppSidebarProps) {
           className="flex items-center w-full max-h-40 justify-center"
         >
           <Image
-            src={Logo.src}
+            src="/Devyn.svg"
             alt="Logo"
             width={300}
             height={300}
