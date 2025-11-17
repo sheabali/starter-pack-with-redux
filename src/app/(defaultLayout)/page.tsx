@@ -1,9 +1,9 @@
-const HomePage = () => {
+import Login from "@/components/module/login";
+
+export default function LoginPage() {
   return (
     <div>
-      <h1>Home Page</h1>
+      <Login />
     </div>
   );
-};
-
-export default HomePage;
+}

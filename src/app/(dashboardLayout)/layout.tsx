@@ -10,12 +10,17 @@ import {
 
 import { useAppSelector } from "@/redux/hooks";
 import { useDecodedToken } from "@/src/hooks/useDecodedToken";
+import { usePathname } from "next/navigation";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathName = usePathname();
+
+  console.log("pathName", pathName);
+
   const token = useAppSelector((state) => state.auth.token);
   const decodedToken = useDecodedToken(token);
   const role = decodedToken?.role || "ADMIN";
@@ -26,14 +31,49 @@ export default function DashboardLayout({
   };
 
   const handleLogout = async () => {};
+  const headerTitleMap: Record<string, React.ReactNode> = {
+    "/admin/user": (
+      <div>
+        <h1 className="text-xl font-semibold">User Management</h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          View and manage all user accounts
+        </p>
+      </div>
+    ),
+
+    "/admin/subscription_revenue": (
+      <div>
+        <h1 className="text-xl font-semibold">Subscriptions & Revenue</h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          Manage pricing and monitor financial performance
+        </p>
+      </div>
+    ),
+
+    "/dashboard": <h1 className="text-xl font-semibold">Dashboard Overview</h1>,
+
+    "/admin/settings": (
+      <div>
+        <h1 className="text-xl font-semibold">Settings</h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          Update Profile & Security
+        </p>
+      </div>
+    ),
+  };
+
+  const pageHeader = headerTitleMap[pathName] || "Dashboard";
 
   return (
     <SidebarProvider>
       <AppSidebar role={role} />
       <SidebarInset>
-        <header className="pt-2 h-16 b shrink-0 bg-[#f6f6f6]  items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+        <header className="pt-2 h-20 b shrink-0 bg-[#f6f6f6]  items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex justify-between items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
+            <div className="flex justify-between items-center gap-8">
+              <SidebarTrigger className="-ml-1" />
+              <h1 className="text-xl font-semibold">{pageHeader}</h1>
+            </div>
 
             <NavbarClient
               currentUser={currentUser}

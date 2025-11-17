@@ -169,7 +169,7 @@ const AppUserList = () => {
           className={
             row.original.status === "Active"
               ? "bg-green-500 hover:bg-green-600"
-              : "bg-gray-400 hover:bg-gray-500"
+              : "bg-red-400 hover:bg-red-500"
           }
         >
           {row.original.status}
@@ -211,7 +211,7 @@ const AppUserList = () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4 w-full">
-        <div className="flex-1 relative">
+        <div className="flex-1 relative mt-4">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             type="text"

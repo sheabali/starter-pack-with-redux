@@ -1,5 +1,11 @@
-const page = () => {
-  return <div>Subscription & Revenue</div>;
+import TransactionLog from "@/components/module/SubscriptionRevenue";
+
+const UserPage = () => {
+  return (
+    <div>
+      <TransactionLog />
+    </div>
+  );
 };
 
-export default page;
+export default UserPage;

@@ -39,6 +39,7 @@ const Login = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof loginInfo>) => {
+    router.push("/admin/dashboard");
     setServerError("");
     console.log("Form submitted:", data);
 

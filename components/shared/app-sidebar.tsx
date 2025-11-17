@@ -51,9 +51,14 @@ const data = {
         icon: User,
       },
       {
-        title: "Go Back To Home",
-        url: "/",
-        icon: Home,
+        title: "Content Management",
+        url: "/admin/content_management",
+        icon: User,
+      },
+      {
+        title: "Settings",
+        url: "/admin/settings",
+        icon: User,
       },
     ],
   },
