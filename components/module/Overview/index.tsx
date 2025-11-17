@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useGetMetaQuery } from "@/redux/api/apiManagementDashboard";
+import { useGetMetaQuery } from "@/redux/api/dashboardManagementApi";
 import Metric from "./Metric";
 import OverviewSkeleton from "./OverviewSkeleton";
 import { SubscriptionBreakdown } from "./SubscriptionBreakdown";
