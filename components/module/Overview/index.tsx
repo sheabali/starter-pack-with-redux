@@ -3,20 +3,27 @@
 
 import { useGetMetaQuery } from "@/redux/api/apiManagementDashboard";
 import Metric from "./Metric";
+import OverviewSkeleton from "./OverviewSkeleton";
 import { SubscriptionBreakdown } from "./SubscriptionBreakdown";
 import { RevenueGrowthChart } from "./UserChart";
 
 const Overview = () => {
-  const { data: metaData } = useGetMetaQuery({}) as any;
+  const { data: metaData, isLoading } = useGetMetaQuery({}) as any;
 
-  if (!metaData) return null;
+  if (isLoading) return <OverviewSkeleton />;
 
   console.log("meta", metaData);
+
+  const metric = {
+    totalCouple: metaData?.data?.totalCouple || 0,
+    totalRevenue: metaData?.data?.totalRevenue || 0,
+    totalSubscription: metaData?.data?.totalSubscription || 0,
+  };
 
   return (
     <div className="space-y-6">
       {/* Metrics component */}
-      <Metric />
+      <Metric metric={metric} />
 
       {/* Charts */}
       <div className="flex flex-col lg:flex-row justify-between gap-6">
