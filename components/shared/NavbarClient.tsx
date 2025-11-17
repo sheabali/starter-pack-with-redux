@@ -7,7 +7,7 @@ import { useState } from "react";
 
 const NavbarClient = ({ currentUser, handleLogout, getDashboardUrl }: any) => {
   const [profileOpen, setProfileOpen] = useState(false);
-
+  console.log("");
   // First letter fallback
   const firstLetter = currentUser?.userName
     ? currentUser.userName.charAt(0).toUpperCase()
@@ -67,7 +67,7 @@ const NavbarClient = ({ currentUser, handleLogout, getDashboardUrl }: any) => {
 
           <li>
             <button
-              className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-gray-100 transition"
+              className="w-full text-left px-4 cursor-pointer py-3 text-sm text-red-600 hover:bg-gray-100 transition"
               onClick={handleLogout}
             >
               Logout

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import AppSidebar from "@/components/shared/app-sidebar";
@@ -7,10 +8,13 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { useGetMeQuery } from "@/redux/api/authApi";
+import { logout } from "@/redux/features/authSlice";
 
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { useDecodedToken } from "@/src/hooks/useDecodedToken";
-import { usePathname } from "next/navigation";
+import { removeCookie } from "@/src/utils/cookies";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function DashboardLayout({
   children,
@@ -18,19 +22,35 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathName = usePathname();
-
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   console.log("pathName", pathName);
 
   const token = useAppSelector((state) => state.auth.token);
   const decodedToken = useDecodedToken(token);
   const role = decodedToken?.role || "ADMIN";
+  console.log(decodedToken?.id);
+
+  const { user } = useAppSelector((state) => state.auth);
+  console.log("uesr", user);
+
+  const { data: getMe0 } = (useGetMeQuery(null) as any) || {};
+  console.log("getMe0", getMe0);
+
+  const originUser = getMe0?.data;
+  console.log("originUser", originUser);
+
   const currentUser = {
-    userName: "John Doe",
-    email: "john.doe@gmail.com",
-    profileImage: "https://i.ibb.co/mVjzdhHW/Rectangle-23852.png",
+    userName: originUser?.fullName,
+    email: originUser?.email,
+    profileImage: originUser?.profile,
   };
 
-  const handleLogout = async () => {};
+  const handleLogout = async () => {
+    await removeCookie();
+    dispatch(logout());
+    router.push("/");
+  };
   const headerTitleMap: Record<string, React.ReactNode> = {
     "/admin/user": (
       <div>
@@ -78,7 +98,7 @@ export default function DashboardLayout({
             <NavbarClient
               currentUser={currentUser}
               handleLogout={handleLogout}
-              getDashboardUrl={() => "/dashboard"}
+              getDashboardUrl={() => "/admin/settings"}
             />
           </div>
         </header>
