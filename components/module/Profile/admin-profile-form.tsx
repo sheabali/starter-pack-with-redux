@@ -1,39 +1,40 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useAuthChangePasswordMutation } from "@/redux/api/dashboardManagementApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { PasswordInput } from "./password-input";
 import { ProfilePictureUpload } from "./profile-picture-upload";
 
 // Zod validation schema
-const adminProfileSchema = z
-  .object({
-    name: z.string().min(2, "Name must be at least 2 characters"),
-    email: z.string().email("Invalid email address"),
-    currentPassword: z.string().min(1, "Current password is required"),
-    newPassword: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .optional()
-      .or(z.literal("")),
-    confirmPassword: z.string().optional().or(z.literal("")),
-  })
-  .refine(
-    (data) => {
-      if (data.newPassword && data.newPassword !== data.confirmPassword) {
-        return false;
-      }
-      return true;
-    },
-    {
-      message: "Passwords do not match",
-      path: ["confirmPassword"],
-    }
-  );
+const adminProfileSchema = z.object({
+  // name: z.string().min(2, "Name must be at least 2 characters"),
+  // email: z.string().email("Invalid email address"),
+  oldPassword: z.string().min(1, "Current password is required"),
+  // newPassword: z
+  //   .string()
+  //   .min(8, "Password must be at least 8 characters")
+  //   .optional()
+  //   .or(z.literal("")),
+  newPassword: z.string().optional().or(z.literal("")),
+});
+// .refine(
+//   (data) => {
+//     if (data.newPassword && data.newPassword !== data.confirmPassword) {
+//       return false;
+//     }
+//     return true;
+//   },
+//   {
+//     message: "Passwords do not match",
+//     path: ["confirmPassword"],
+//   }
+// );
 
 type AdminProfileFormData = z.infer<typeof adminProfileSchema>;
 
@@ -42,6 +43,9 @@ export function AdminProfileForm() {
     "/placeholder.svg?height=80&width=80"
   );
   const [isLoading, setIsLoading] = useState(false);
+
+  const [changePassword, { isLoading: isChangingPassword }] =
+    useAuthChangePasswordMutation();
 
   const {
     register,
@@ -52,26 +56,38 @@ export function AdminProfileForm() {
   } = useForm<AdminProfileFormData>({
     resolver: zodResolver(adminProfileSchema),
     defaultValues: {
-      name: "Michel",
-      email: "michael@admin.com",
-      currentPassword: "",
+      // name: "Michel",
+      // email: "michael@admin.com",
+      oldPassword: "",
+      // newPassword: "",
       newPassword: "",
-      confirmPassword: "",
     },
   });
 
-  const newPassword = watch("newPassword");
+  // const newPassword = watch("newPassword");
 
   const onSubmit = async (data: AdminProfileFormData) => {
     setIsLoading(true);
+
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Form submitted:", data);
-      // Reset form after successful submission
-      reset();
-    } catch (error) {
-      console.error("Error:", error);
+      const res = (await changePassword(data).unwrap()) as any;
+
+      if (res?.success) {
+        toast.success("Password changed successfully");
+        reset();
+      } else {
+        toast.error(res?.message || "Failed to change password");
+      }
+    } catch (err: any) {
+      console.error("Error:", err);
+
+      // RTK Query error formatting
+      const errorMessage =
+        err?.data?.message ||
+        err?.error ||
+        "Something went wrong while changing the password";
+
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -94,18 +110,18 @@ export function AdminProfileForm() {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Your Name
           </label>
-          <Input
+          {/* <Input
             {...register("name")}
             placeholder="Michel"
             className="w-full"
-          />
-          {errors.name && (
+          /> */}
+          {/* {errors.name && (
             <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>
-          )}
+          )} */}
         </div>
 
         {/* Email Field */}
-        <div>
+        {/* <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Email
           </label>
@@ -118,7 +134,7 @@ export function AdminProfileForm() {
           {errors.email && (
             <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
           )}
-        </div>
+        </div> */}
 
         {/* Change Password Section */}
         <div className="border-t pt-6">
@@ -132,18 +148,18 @@ export function AdminProfileForm() {
               Current Password
             </label>
             <PasswordInput
-              {...register("currentPassword")}
+              {...register("oldPassword")}
               placeholder="••••••••••"
             />
-            {errors.currentPassword && (
+            {errors.oldPassword && (
               <p className="text-sm text-red-500 mt-1">
-                {errors.currentPassword.message}
+                {errors.oldPassword.message}
               </p>
             )}
           </div>
 
           {/* New Password */}
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               New Password
             </label>
@@ -156,7 +172,7 @@ export function AdminProfileForm() {
                 {errors.newPassword.message}
               </p>
             )}
-          </div>
+          </div> */}
 
           {/* Confirm New Password */}
           <div className="mb-4">
@@ -164,12 +180,12 @@ export function AdminProfileForm() {
               Confirm New Password
             </label>
             <PasswordInput
-              {...register("confirmPassword")}
+              {...register("newPassword")}
               placeholder="••••••••••"
             />
-            {errors.confirmPassword && (
+            {errors.newPassword && (
               <p className="text-sm text-red-500 mt-1">
-                {errors.confirmPassword.message}
+                {errors.newPassword.message}
               </p>
             )}
           </div>

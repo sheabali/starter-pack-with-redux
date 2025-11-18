@@ -72,6 +72,13 @@ export const dashboardApi = baseApi.injectEndpoints({
         };
       },
     }),
+    authChangePassword: builder.mutation({
+      query: (data: any) => ({
+        url: "/auth/change-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -82,4 +89,5 @@ export const {
   useGetAllSubscriptionQuery,
   useUpdateSubscriptionMutation,
   useGetAllTransactionLogQuery,
+  useAuthChangePasswordMutation,
 } = dashboardApi;
