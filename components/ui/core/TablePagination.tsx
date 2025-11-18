@@ -101,7 +101,7 @@ const TablePagination = ({
               return (
                 <span
                   key={`ellipsis-${index}`}
-                  className="min-w-[40px] h-10 px-3 flex items-center justify-center text-gray-500"
+                  className="min-w-10 h-10 px-3 flex items-center justify-center text-gray-500"
                 >
                   ...
                 </span>
@@ -114,11 +114,11 @@ const TablePagination = ({
                 key={pageNum}
                 onClick={() => handlePageClick(pageNum)}
                 className={`
-                  min-w-[40px] h-10 px-3 rounded-lg text-sm font-medium
+                  min-w-10 h-10 px-3 rounded-lg text-sm font-medium
                   transition-all
                   ${
                     currentPage === pageNum
-                      ? "bg-gradient-to-r from-indigo-800 to-pink-500 text-white"
+                      ? "bg-[#a66dd4] text-white"
                       : "text-gray-600 hover:bg-gray-50"
                   }
                 `}
@@ -138,7 +138,7 @@ const TablePagination = ({
             ${
               currentPage === totalPage
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                : "bg-gradient-to-r from-indigo-800 to-pink-500 text-white font-semibold rounded-full shadow-md hover:opacity-90 transition-all duration-300"
+                : "bg-[#a66dd4] text-white font-semibold rounded-full shadow-md hover:opacity-90 transition-all duration-300"
             }
           `}
         >

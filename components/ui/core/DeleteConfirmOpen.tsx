@@ -11,17 +11,19 @@ import {
 } from "../dialog";
 import { Separator } from "../separator";
 
-type DeleteConfirmOpenProps = {
+type UserProfileModalOpenProps = {
   selectedUser: any;
   open: boolean;
   setOpen: (open: boolean) => void;
 };
 
-const DeleteConfirmOpen = ({
+const UserProfileModalOpen = ({
   selectedUser,
   open,
   setOpen,
-}: DeleteConfirmOpenProps) => {
+}: UserProfileModalOpenProps) => {
+  console.log("selectU", selectedUser);
+
   const formatDate = (dateString: any) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -48,11 +50,11 @@ const DeleteConfirmOpen = ({
                 <h3 className="text-lg mb-4">Partner 1</h3>
                 <div className="flex items-center gap-2 text-sm">
                   <User className="h-4 w-4 text-gray-500" />
-                  <span>{selectedUser.partnerOne}</span>
+                  <span>{selectedUser.partner1?.name}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Mail className="h-4 w-4 text-gray-500" />
-                  <span>{selectedUser.emailOne}</span>
+                  <span>{selectedUser?.partner1?.email}</span>
                 </div>
               </div>
 
@@ -60,11 +62,11 @@ const DeleteConfirmOpen = ({
                 <h3 className="text-lg mb-4">Partner 2</h3>
                 <div className="flex items-center gap-2 text-sm">
                   <User className="h-4 w-4 text-gray-500" />
-                  <span>{selectedUser.partnerTwo}</span>
+                  <span>{selectedUser.partner2?.name}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm">
                   <Mail className="h-4 w-4 text-gray-500" />
-                  <span>{selectedUser.emailTwo}</span>
+                  <span>{selectedUser?.partner2?.email}</span>
                 </div>
               </div>
             </div>
@@ -93,7 +95,7 @@ const DeleteConfirmOpen = ({
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Plan</p>
-                  <p className="font-medium">Monthly</p>
+                  <p className="font-medium">{selectedUser.plan}</p>
                 </div>
               </div>
             </div>
@@ -105,7 +107,7 @@ const DeleteConfirmOpen = ({
               <h3 className="mb-3">Subscription Status</h3>
               <Badge
                 className={
-                  selectedUser.status === "Active"
+                  selectedUser.status === "ACTIVE"
                     ? "bg-green-500 text-white px-4 py-2"
                     : "bg-gray-400 text-white px-4 py-2"
                 }
@@ -126,4 +128,4 @@ const DeleteConfirmOpen = ({
   );
 };
 
-export default DeleteConfirmOpen;
+export default UserProfileModalOpen;

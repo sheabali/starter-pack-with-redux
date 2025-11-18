@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import TablePagination from "@/components/ui/core/TablePagination";
 import { YGTable } from "@/components/ui/core/YGTable/BPTable";
@@ -11,7 +11,6 @@ import { AlertCircle, CircleOff, Eye, Loader2, Search } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import DeleteConfirmOpen from "@/components/ui/core/DeleteConfirmOpen";
 
 import {
   Dialog,
@@ -31,13 +30,13 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 
+import UserProfileModalOpen from "@/components/ui/core/DeleteConfirmOpen";
 import {
   useDeleteUserMutation,
   useGetAllUsersQuery,
 } from "@/redux/api/dashboardManagementApi";
 import { toast } from "sonner";
 
-// Updated Types to match API response
 interface Partner {
   id: string;
   name: string;
@@ -67,15 +66,13 @@ const AppUserList = () => {
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All Status");
 
-  // Debounce search to avoid too many API calls
-  useState(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
     }, 500);
     return () => clearTimeout(timer);
   });
 
-  // Fetch data with query parameters
   const {
     data: appUserListData,
     isLoading,
@@ -101,6 +98,8 @@ const AppUserList = () => {
   const [open, setOpen] = useState(false);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<UserData | null>(null);
+
+  console.log("selectedUser", selectedUser);
 
   const handleViewClick = (user: UserData) => {
     setSelectedUser(user);
@@ -254,7 +253,7 @@ const AppUserList = () => {
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
-              setCurrentPage(1); // Reset to first page on search
+              setCurrentPage(1);
             }}
             className="pl-10 py-8 bg-white"
           />
@@ -272,7 +271,7 @@ const AppUserList = () => {
                 key={status}
                 onClick={() => {
                   setSelectedStatus(status);
-                  setCurrentPage(1); // Reset to first page on filter change
+                  setCurrentPage(1);
                 }}
                 className={selectedStatus === status ? "bg-accent" : ""}
               >
@@ -298,14 +297,12 @@ const AppUserList = () => {
         </>
       )}
 
-      {/* View Couple Profile */}
-      <DeleteConfirmOpen
+      <UserProfileModalOpen
         selectedUser={selectedUser}
         open={open}
         setOpen={setOpen}
       />
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>

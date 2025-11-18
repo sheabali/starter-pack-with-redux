@@ -45,8 +45,41 @@ export const dashboardApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+    getAllSubscription: builder.query({
+      query: () => ({
+        url: "/subscription",
+      }),
+    }),
+    updateSubscription: builder.mutation({
+      query: (data: any) => ({
+        url: `/subscription/${data.id}`,
+        method: "PATCH",
+        body: data,
+      }),
+    }),
+    getAllTransactionLog: builder.query({
+      query: ({ page, limit, status }: any) => {
+        const params: any = {};
+
+        if (page) params.page = page;
+        if (limit) params.limit = limit;
+        if (status) params.status = status;
+
+        return {
+          url: "/payment/admin",
+          method: "GET",
+          params,
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetMetaQuery, useGetAllUsersQuery, useDeleteUserMutation } =
-  dashboardApi;
+export const {
+  useGetMetaQuery,
+  useGetAllUsersQuery,
+  useDeleteUserMutation,
+  useGetAllSubscriptionQuery,
+  useUpdateSubscriptionMutation,
+  useGetAllTransactionLogQuery,
+} = dashboardApi;

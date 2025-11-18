@@ -32,8 +32,8 @@ const Overview = () => {
         </div>
         <div className="w-[30%]">
           <SubscriptionBreakdown
-            monthlyUsers={metaData?.data?.monthlyPlanUser}
-            yearlyUsers={metaData?.data?.yearlyPlanUser}
+            monthlyUsers={metaData?.data?.monthlyPlanUsersCount}
+            yearlyUsers={metaData?.data?.yearlyPlanUsersCount}
           />
         </div>
       </div>
