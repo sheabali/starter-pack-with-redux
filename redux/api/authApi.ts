@@ -70,14 +70,14 @@ export const authApi = baseApi.injectEndpoints({
       }),
       providesTags: ["User"],
     }),
-    updateUser: builder.mutation({
-      query: (data: any) => ({
-        url: "/users/profile",
-        method: "PUT",
-        body: data,
-      }),
-      invalidatesTags: ["User"],
-    }),
+    // updateUser: builder.mutation({
+    //   query: (data: any) => ({
+    //     url: "/users/profile",
+    //     method: "PUT",
+    //     body: data,
+    //   }),
+    //   invalidatesTags: ["User"],
+    // }),
   }),
 });
 
@@ -91,5 +91,5 @@ export const {
   useResetPasswordMutation,
   useChangePasswordMutation,
   useGetMeQuery,
-  useUpdateUserMutation,
+  // useUpdateUserMutation,
 } = authApi;

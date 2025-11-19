@@ -3,28 +3,28 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
+import { useGetMeQuery } from "@/redux/api/authApi";
 import {
   useAuthChangePasswordMutation,
   useUpdateUserMutation,
 } from "@/redux/api/dashboardManagementApi";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { PasswordInput } from "./password-input";
 import { ProfilePictureUpload } from "./profile-picture-upload";
 
-// Schema for profile update
 const profileUpdateSchema = z.object({
   fullName: z.string().min(2, "Name must be at least 2 characters"),
 });
 
-// Schema for password change
 const passwordChangeSchema = z
   .object({
     oldPassword: z.string().min(1, "Current password is required"),
-    newPassword: z.string().min(8, "Password must be at least 8 characters"),
+    newPassword: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
@@ -36,21 +36,22 @@ type ProfileUpdateFormData = z.infer<typeof profileUpdateSchema>;
 type PasswordChangeFormData = z.infer<typeof passwordChangeSchema>;
 
 export function AdminProfileForm() {
-  const [profilePicture, setProfilePicture] = useState(
-    "/placeholder.svg?height=80&width=80"
-  );
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const { data: profileData, isLoading: isLoadingProfile } = useGetMeQuery(
+    {}
+  ) as any;
 
   const [updateProfile, { isLoading: isUpdatingProfile }] =
     useUpdateUserMutation();
   const [changePassword, { isLoading: isChangingPassword }] =
     useAuthChangePasswordMutation();
 
-  // Form for profile update
   const {
     register: registerProfile,
     handleSubmit: handleProfileSubmit,
     formState: { errors: profileErrors },
+    setValue,
   } = useForm<ProfileUpdateFormData>({
     resolver: zodResolver(profileUpdateSchema),
     defaultValues: {
@@ -58,7 +59,6 @@ export function AdminProfileForm() {
     },
   });
 
-  // Form for password change
   const {
     register: registerPassword,
     handleSubmit: handlePasswordSubmit,
@@ -73,7 +73,12 @@ export function AdminProfileForm() {
     },
   });
 
-  // Handle profile update
+  useEffect(() => {
+    if (profileData?.data?.fullName) {
+      setValue("fullName", profileData.data.fullName);
+    }
+  }, [profileData, setValue]);
+
   const onProfileSubmit = async (data: ProfileUpdateFormData) => {
     try {
       const formData = new FormData();
@@ -100,7 +105,6 @@ export function AdminProfileForm() {
     }
   };
 
-  // Handle password change
   const onPasswordSubmit = async (data: PasswordChangeFormData) => {
     try {
       const res = (await changePassword({
@@ -125,15 +129,24 @@ export function AdminProfileForm() {
   };
 
   const handlePictureChange = (newPicture: string, file?: File) => {
-    setProfilePicture(newPicture);
     if (file) {
       setSelectedFile(file);
     }
   };
 
+  if (isLoadingProfile) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-gray-600">Loading profile...</div>
+      </div>
+    );
+  }
+
+  const profilePicture =
+    profileData?.data?.profile || "/placeholder.svg?height=80&width=80";
+
   return (
     <div className="space-y-6">
-      {/* Profile Update Form */}
       <form
         onSubmit={handleProfileSubmit(onProfileSubmit)}
         className="space-y-6 bg-white rounded-lg p-6"
@@ -142,13 +155,11 @@ export function AdminProfileForm() {
           Profile Information
         </h2>
 
-        {/* Profile Picture Section */}
         <ProfilePictureUpload
           profilePicture={profilePicture}
           onPictureChange={handlePictureChange}
         />
 
-        {/* Full Name Field */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Your Name
@@ -156,6 +167,7 @@ export function AdminProfileForm() {
           <Input
             {...registerProfile("fullName")}
             placeholder="Enter your full name"
+            defaultValue={profileData?.data?.fullName || ""}
             className="w-full"
           />
           {profileErrors.fullName && (
@@ -165,7 +177,6 @@ export function AdminProfileForm() {
           )}
         </div>
 
-        {/* Submit Button */}
         <div className="flex justify-end pt-4">
           <Button
             type="submit"
@@ -177,7 +188,6 @@ export function AdminProfileForm() {
         </div>
       </form>
 
-      {/* Password Change Form */}
       <form
         onSubmit={handlePasswordSubmit(onPasswordSubmit)}
         className="space-y-6 bg-white rounded-lg p-6"
@@ -186,7 +196,6 @@ export function AdminProfileForm() {
           Change Password
         </h2>
 
-        {/* Current Password */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Current Password
@@ -202,7 +211,6 @@ export function AdminProfileForm() {
           )}
         </div>
 
-        {/* New Password */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             New Password
@@ -218,7 +226,6 @@ export function AdminProfileForm() {
           )}
         </div>
 
-        {/* Confirm New Password */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Confirm New Password
@@ -234,7 +241,6 @@ export function AdminProfileForm() {
           )}
         </div>
 
-        {/* Submit Button */}
         <div className="flex justify-end pt-4">
           <Button
             type="submit"

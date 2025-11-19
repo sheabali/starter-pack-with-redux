@@ -38,7 +38,7 @@ export function ProfilePictureUpload({
       >
         <div className="relative w-20 h-20 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
           <Image
-            src="https://i.ibb.co/mVjzdhHW/Rectangle-23852.png"
+            src={profilePicture}
             alt="Profile picture"
             width={80}
             height={80}

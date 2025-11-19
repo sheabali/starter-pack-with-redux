@@ -39,7 +39,7 @@ export const dashboardApi = baseApi.injectEndpoints({
 
     updateUser: builder.mutation({
       query: (data: any) => ({
-        url: `/user/update-profile`,
+        url: `/user/update-admin`,
         method: "PUT",
         body: data,
       }),
