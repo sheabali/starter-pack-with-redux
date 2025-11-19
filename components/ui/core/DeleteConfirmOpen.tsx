@@ -24,8 +24,13 @@ const UserProfileModalOpen = ({
 }: UserProfileModalOpenProps) => {
   console.log("selectU", selectedUser);
 
-  const formatDate = (dateString: any) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+  const formatDate = (dateString?: string | null) => {
+    if (!dateString) return "N/A";
+
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "N/A";
+
+    return date.toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -80,11 +85,9 @@ const UserProfileModalOpen = ({
                   <Calendar className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Join Date</p>
+                  <p className="text-sm text-gray-500">Join Date (Partner 1)</p>
                   <p className="font-medium">
-                    {selectedUser.joinDate
-                      ? formatDate(selectedUser.joinDate)
-                      : "N/A"}
+                    {formatDate(selectedUser.partner1?.join)}
                   </p>
                 </div>
               </div>

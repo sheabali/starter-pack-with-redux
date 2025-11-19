@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -114,12 +114,16 @@ const AppUserList = () => {
   const confirmDelete = async () => {
     if (userToDelete) {
       try {
-        await deleteUser(userToDelete.coupleId).unwrap();
-        toast.success("User deleted successfully");
+        const res = (await deleteUser(userToDelete.coupleId).unwrap()) as any;
+        if (res?.success) {
+          toast.success(res.message);
+        }
         setDeleteConfirmOpen(false);
         setUserToDelete(null);
       } catch (error) {
-        toast("Failed to delete couple. Please try again.");
+        const errMsg =
+          (error as any)?.data?.message || "Failed to delete couple";
+        toast.error(errMsg);
       }
     }
   };

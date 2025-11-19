@@ -1,9 +1,9 @@
-import { PolicyForm } from "@/components/module/ContentManagement";
+import ContentManagement from "@/components/module/ContentManagement";
 
 const page = () => {
   return (
     <div>
-      <PolicyForm />
+      <ContentManagement />
     </div>
   );
 };

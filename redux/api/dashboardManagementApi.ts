@@ -37,10 +37,9 @@ export const dashboardApi = baseApi.injectEndpoints({
       providesTags: ["User"],
     }),
 
-    // Add delete mutation
     deleteUser: builder.mutation({
       query: (coupleId: string) => ({
-        url: `/user/${coupleId}`,
+        url: `/user/hard-delete/${coupleId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["User"],
@@ -79,6 +78,26 @@ export const dashboardApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    securityPolicy: builder.query({
+      query: () => ({
+        url: "/security",
+        method: "GET",
+      }),
+    }),
+    createSecurityPolicy: builder.mutation({
+      query: (data: any) => ({
+        url: "/security",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    updateSecurityPolicy: builder.mutation({
+      query: (data: any) => ({
+        url: `/security/${data.type}`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -86,8 +105,11 @@ export const {
   useGetMetaQuery,
   useGetAllUsersQuery,
   useDeleteUserMutation,
+  useSecurityPolicyQuery,
   useGetAllSubscriptionQuery,
   useUpdateSubscriptionMutation,
   useGetAllTransactionLogQuery,
   useAuthChangePasswordMutation,
+  useCreateSecurityPolicyMutation,
+  useUpdateSecurityPolicyMutation,
 } = dashboardApi;
