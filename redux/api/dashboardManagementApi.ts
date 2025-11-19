@@ -37,6 +37,15 @@ export const dashboardApi = baseApi.injectEndpoints({
       providesTags: ["User"],
     }),
 
+    updateUser: builder.mutation({
+      query: (data: any) => ({
+        url: `/user/update-profile`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
     deleteUser: builder.mutation({
       query: (coupleId: string) => ({
         url: `/user/hard-delete/${coupleId}`,
@@ -104,6 +113,7 @@ export const dashboardApi = baseApi.injectEndpoints({
 export const {
   useGetMetaQuery,
   useGetAllUsersQuery,
+  useUpdateUserMutation,
   useDeleteUserMutation,
   useSecurityPolicyQuery,
   useGetAllSubscriptionQuery,
