@@ -119,10 +119,13 @@ const PlanConfiguration: React.FC = () => {
 
       const payload = {
         id: sub.id,
+        title: sub.title,
         price:
           duration === "MONTHLY"
             ? getValues("monthlyPrice")
             : getValues("yearlyPrice"),
+        duration,
+        isDiscounted: duration === "YEARLY",
         discountPercent:
           duration === "MONTHLY" ? 0 : getValues("yearlyDiscount"),
         isActive,

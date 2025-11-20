@@ -6,7 +6,17 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Home, LayoutDashboard, User } from "lucide-react";
+import {
+  BadgeDollarSign,
+  FileCog,
+  HelpCircle,
+  Home,
+  LayoutDashboard,
+  Settings,
+  User,
+  Users,
+} from "lucide-react";
+
 import Image from "next/image";
 import Link from "next/link";
 import { NavMain } from "./nav-main";
@@ -39,26 +49,30 @@ const data = {
         url: "/admin/dashboard",
         icon: LayoutDashboard,
       },
-
       {
         title: "Users",
         url: "/admin/user",
-        icon: User,
+        icon: Users,
       },
       {
         title: "Subscription & Revenue",
         url: "/admin/subscription_revenue",
-        icon: User,
+        icon: BadgeDollarSign,
       },
       {
         title: "Content Management",
         url: "/admin/content_management",
-        icon: User,
+        icon: FileCog,
+      },
+      {
+        title: "FAQ Management",
+        url: "/admin/faq",
+        icon: HelpCircle,
       },
       {
         title: "Settings",
         url: "/admin/settings",
-        icon: User,
+        icon: Settings,
       },
     ],
   },

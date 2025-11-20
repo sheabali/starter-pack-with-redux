@@ -59,8 +59,8 @@ export function NavMain({
                           : ""
                       }`}
                     >
-                      {item.icon && <item.icon className="mr-2 h-5 w-5" />}
-                      <span>{item.title}</span>
+                      {item.icon && <item.icon className="mr-2 h-20 w-20" />}
+                      <span className="text-2xl">{item.title}</span>
                       <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
@@ -71,12 +71,15 @@ export function NavMain({
                           <SidebarMenuSubButton asChild>
                             <Link href={subItem.url}>
                               {subItem.icon && (
-                                <subItem.icon className="mr-2 h-5 w-5" />
+                                <subItem.icon className="mr-2 h-8 w-8" />
+                              )}
+                              {subItem.icon && (
+                                <subItem.icon className="mr-2 h-8 w-8" />
                               )}
                               <span
                                 className={`${
                                   pathname === subItem.url ? "text-primary" : ""
-                                }`}
+                                } text-sm`}
                               >
                                 {subItem.title}
                               </span>

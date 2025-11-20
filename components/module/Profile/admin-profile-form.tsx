@@ -1,9 +1,9 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 import { useGetMeQuery } from "@/redux/api/authApi";
 import {
   useAuthChangePasswordMutation,
@@ -36,14 +36,18 @@ type ProfileUpdateFormData = z.infer<typeof profileUpdateSchema>;
 type PasswordChangeFormData = z.infer<typeof passwordChangeSchema>;
 
 export function AdminProfileForm() {
+  const [profilePicture, setProfilePicture] = useState<string>("/default.png");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const { data: profileData, isLoading: isLoadingProfile } = useGetMeQuery(
-    {}
-  ) as any;
+  const {
+    data: profileData,
+    isLoading: isLoadingProfile,
+    refetch,
+  } = useGetMeQuery({}) as any;
 
   const [updateProfile, { isLoading: isUpdatingProfile }] =
     useUpdateUserMutation();
+
   const [changePassword, { isLoading: isChangingPassword }] =
     useAuthChangePasswordMutation();
 
@@ -59,6 +63,17 @@ export function AdminProfileForm() {
     },
   });
 
+  useEffect(() => {
+    if (profileData?.data) {
+      if (profileData.data.fullName) {
+        setValue("fullName", profileData.data.fullName);
+      }
+      if (profileData?.data.profile) {
+        setProfilePicture(profileData.data.profile);
+      }
+    }
+  }, [profileData, setValue]);
+
   const {
     register: registerPassword,
     handleSubmit: handlePasswordSubmit,
@@ -66,22 +81,17 @@ export function AdminProfileForm() {
     reset: resetPassword,
   } = useForm<PasswordChangeFormData>({
     resolver: zodResolver(passwordChangeSchema),
-    defaultValues: {
-      oldPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    },
   });
 
-  useEffect(() => {
-    if (profileData?.data?.fullName) {
-      setValue("fullName", profileData.data.fullName);
-    }
-  }, [profileData, setValue]);
+  const handlePictureChange = (data: { preview: string; file: File }) => {
+    setProfilePicture(data.preview);
+    setSelectedFile(data.file);
+  };
 
   const onProfileSubmit = async (data: ProfileUpdateFormData) => {
     try {
       const formData = new FormData();
+
       formData.append("data", JSON.stringify({ fullName: data.fullName }));
 
       if (selectedFile) {
@@ -92,16 +102,16 @@ export function AdminProfileForm() {
 
       if (res?.success) {
         toast.success("Profile updated successfully");
+        refetch();
       } else {
         toast.error(res?.message || "Failed to update profile");
       }
     } catch (err: any) {
-      console.error("Error:", err);
-      const errorMessage =
+      const message =
         err?.data?.message ||
         err?.error ||
         "Something went wrong while updating profile";
-      toast.error(errorMessage);
+      toast.error(message);
     }
   };
 
@@ -119,18 +129,11 @@ export function AdminProfileForm() {
         toast.error(res?.message || "Failed to change password");
       }
     } catch (err: any) {
-      console.error("Error:", err);
       const errorMessage =
         err?.data?.message ||
         err?.error ||
         "Something went wrong while changing the password";
       toast.error(errorMessage);
-    }
-  };
-
-  const handlePictureChange = (newPicture: string, file?: File) => {
-    if (file) {
-      setSelectedFile(file);
     }
   };
 
@@ -141,9 +144,6 @@ export function AdminProfileForm() {
       </div>
     );
   }
-
-  const profilePicture =
-    profileData?.data?.profile || "/placeholder.svg?height=80&width=80";
 
   return (
     <div className="space-y-6">
@@ -167,7 +167,6 @@ export function AdminProfileForm() {
           <Input
             {...registerProfile("fullName")}
             placeholder="Enter your full name"
-            defaultValue={profileData?.data?.fullName || ""}
             className="w-full"
           />
           {profileErrors.fullName && (

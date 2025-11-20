@@ -107,6 +107,40 @@ export const dashboardApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    getAllFAQ: builder.query({
+      query: () => ({
+        url: "/faq",
+      }),
+    }),
+    createFAQ: builder.mutation({
+      query: (data: any) => ({
+        url: "/faq",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    updateFAQ: builder.mutation({
+      query: (data: any) => {
+        const id = data.id;
+        const payload = {
+          title: data.title,
+          description: data.description,
+        };
+
+        return {
+          url: `/faq/${id}`,
+          method: "PATCH",
+          body: payload,
+        };
+      },
+    }),
+
+    deleteFAQ: builder.mutation({
+      query: (id: string) => ({
+        url: `/faq/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -122,4 +156,8 @@ export const {
   useAuthChangePasswordMutation,
   useCreateSecurityPolicyMutation,
   useUpdateSecurityPolicyMutation,
+  useGetAllFAQQuery,
+  useCreateFAQMutation,
+  useUpdateFAQMutation,
+  useDeleteFAQMutation,
 } = dashboardApi;

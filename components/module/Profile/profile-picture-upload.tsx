@@ -5,7 +5,7 @@ import { useRef } from "react";
 
 interface ProfilePictureUploadProps {
   profilePicture: string;
-  onPictureChange: (url: string) => void;
+  onPictureChange: (data: { preview: string; file: File }) => void;
 }
 
 export function ProfilePictureUpload({
@@ -20,13 +20,18 @@ export function ProfilePictureUpload({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        onPictureChange(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      onPictureChange({
+        preview: reader.result as string, // Base64 preview
+        file, // actual file
+      });
+    };
+
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -45,10 +50,12 @@ export function ProfilePictureUpload({
             className="object-cover"
           />
         </div>
+
         <p className="text-sm text-gray-600 text-center">
           Tap to change profile picture
         </p>
       </button>
+
       <input
         ref={fileInputRef}
         type="file"
