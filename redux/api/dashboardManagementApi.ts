@@ -56,7 +56,9 @@ export const dashboardApi = baseApi.injectEndpoints({
     getAllSubscription: builder.query({
       query: () => ({
         url: "/subscription",
+        method: "GET",
       }),
+      providesTags: ["User"],
     }),
     updateSubscription: builder.mutation({
       query: (data: any) => ({
@@ -64,6 +66,7 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: data,
       }),
+      invalidatesTags: ["User"],
     }),
     getAllTransactionLog: builder.query({
       query: ({ page, limit, status }: any) => {
@@ -79,6 +82,7 @@ export const dashboardApi = baseApi.injectEndpoints({
           params,
         };
       },
+      providesTags: ["User"],
     }),
     authChangePassword: builder.mutation({
       query: (data: any) => ({
@@ -86,12 +90,14 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["User"],
     }),
     securityPolicy: builder.query({
       query: () => ({
         url: "/security",
         method: "GET",
       }),
+      providesTags: ["User"],
     }),
     createSecurityPolicy: builder.mutation({
       query: (data: any) => ({
@@ -99,6 +105,7 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["User"],
     }),
     updateSecurityPolicy: builder.mutation({
       query: (data: any) => ({
@@ -106,11 +113,13 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["User"],
     }),
     getAllFAQ: builder.query({
       query: () => ({
         url: "/faq",
       }),
+      providesTags: ["User"],
     }),
     createFAQ: builder.mutation({
       query: (data: any) => ({
@@ -118,6 +127,7 @@ export const dashboardApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["User"],
     }),
     updateFAQ: builder.mutation({
       query: (data: any) => {
@@ -133,6 +143,7 @@ export const dashboardApi = baseApi.injectEndpoints({
           body: payload,
         };
       },
+      invalidatesTags: ["User"],
     }),
 
     deleteFAQ: builder.mutation({
@@ -140,6 +151,7 @@ export const dashboardApi = baseApi.injectEndpoints({
         url: `/faq/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["User"],
     }),
   }),
 });

@@ -31,6 +31,8 @@ export function NavUser() {
 
   const { data, error, isLoading } = useGetMeQuery({ skip: !token }) as any;
 
+  console.log("data", data);
+
   const router = useRouter();
   const pathname = usePathname();
   console.log("pathName", pathname);
@@ -87,14 +89,14 @@ export function NavUser() {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage
-                  src={data?.data?.image || placeholder}
+                  src={data?.data?.profile || placeholder}
                   alt={data?.data?.fullName ?? "User"}
                   className="h-8 w-8 object-cover rounded-lg"
                 />
 
                 <AvatarFallback className="rounded-lg">
                   <Image
-                    src={data?.data?.image || placeholder}
+                    src={data?.data?.profile || placeholder}
                     alt={data?.data?.fullName ?? "User"}
                     width={60}
                     height={60}
@@ -123,13 +125,13 @@ export function NavUser() {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
-                    src={data?.data?.image || placeholder.src}
+                    src={data?.data?.profile || placeholder.src}
                     alt={data?.data?.fullName ?? "User"}
                     className="h-8 w-8 object-cove  r rounded-lg"
                   />
                   <AvatarFallback className="rounded-lg">
                     <Image
-                      src={data?.data?.image || placeholder}
+                      src={data?.data?.profile || placeholder}
                       alt={data?.data?.fullName ?? "User"}
                       width={60}
                       height={60}
