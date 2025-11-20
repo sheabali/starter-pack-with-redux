@@ -19,9 +19,11 @@ export const RevenueGrowthChart = ({ data }: any) => {
   }));
 
   return (
-    <div className="bg-white border-0 shadow-lg p-6 rounded-2xl h-full">
+    <div className="bg-white border-0 shadow-lg p-6 rounded-2xl h-full w-full">
       <h3 className="text-lg text-gray-900 mb-4">Revenue Growth</h3>
-      <div style={{ height: "450px" }}>
+
+      {/* Make chart fully responsive */}
+      <div className="w-full h-[300px] md:h-[400px] lg:h-[450px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={chartData}
@@ -33,19 +35,23 @@ export const RevenueGrowthChart = ({ data }: any) => {
                 <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.05} />
               </linearGradient>
             </defs>
+
             <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+
             <XAxis
               dataKey="month"
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 12, fill: "#64748b" }}
             />
+
             <YAxis
               orientation="right"
               axisLine={false}
               tickLine={false}
               tick={{ fontSize: 12, fill: "#64748b" }}
             />
+
             <Tooltip
               contentStyle={{
                 backgroundColor: "#fff",
@@ -56,6 +62,7 @@ export const RevenueGrowthChart = ({ data }: any) => {
               labelFormatter={(label) => `Month: ${label}`}
               formatter={(value) => [`$${value}`, "Revenue"]}
             />
+
             <Area
               type="monotone"
               dataKey="revenue"

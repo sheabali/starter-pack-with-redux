@@ -42,36 +42,32 @@ export const SubscriptionBreakdown = ({ monthlyUsers, yearlyUsers }: any) => {
   );
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 h-full">
-      <div className="mb-4">
-        <h3 className="text-lg text-gray-900">Subscription Breakdown</h3>
-      </div>
+    <div className="bg-white rounded-xl shadow-lg p-6 h-full w-full">
+      <h3 className="text-lg text-gray-900 mb-4">Subscription Breakdown</h3>
 
-      <div
-        className="flex items-center justify-center"
-        style={{ height: "280px" }}
-      >
+      {/* Fully responsive height */}
+      <div className="w-full h-[220px] sm:h-[260px] md:h-[300px] lg:h-[320px] flex items-center justify-center">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={90}
+              innerRadius="60%"
+              outerRadius="85%"
               paddingAngle={5}
               dataKey="value"
               label={renderCustomLabel}
             >
               {data.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
+                <Cell key={index} fill={entry.color} />
               ))}
             </Pie>
           </PieChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="flex justify-center gap-4 items-center mt-4">
+      <div className="flex justify-center gap-4 items-center mt-4 flex-wrap">
         <p className="text-[#ff6b81] flex items-center gap-2">
           <Box size={16} />
           Monthly ({monthlyUsers})
