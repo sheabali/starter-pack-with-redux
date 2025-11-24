@@ -12,8 +12,6 @@ const Overview = () => {
 
   if (isLoading) return <OverviewSkeleton />;
 
-  console.log("meta", metaData);
-
   const metric = {
     totalCouple: metaData?.data?.totalCouple || 0,
     totalRevenue: metaData?.data?.totalRevenue || 0,
@@ -22,10 +20,8 @@ const Overview = () => {
 
   return (
     <div className="space-y-6">
-      {/* Metrics component */}
       <Metric metric={metric} />
 
-      {/* Charts */}
       <div className="flex flex-col lg:flex-row justify-between gap-6">
         <div className="flex-1  min-w-0">
           <RevenueGrowthChart data={metaData?.data?.monthlyGrowth} />

@@ -32,7 +32,7 @@ const PriceInput = ({
   disabled?: boolean;
 }) => (
   <div className="flex items-center gap-2">
-    <span className="text-sm">$</span>
+    <span className="text-sm ">$</span>
     <input
       type="number"
       step="0.01"
@@ -117,6 +117,9 @@ const PlanConfiguration: React.FC = () => {
       const sub = duration === "MONTHLY" ? monthlySub : yearlySub;
       if (!sub) return;
 
+      const currentDiscount =
+        duration === "YEARLY" ? getValues("yearlyDiscount") : 0;
+
       const payload = {
         id: sub.id,
         title: sub.title,
@@ -125,9 +128,8 @@ const PlanConfiguration: React.FC = () => {
             ? getValues("monthlyPrice")
             : getValues("yearlyPrice"),
         duration,
-        isDiscounted: duration === "YEARLY",
-        discountPercent:
-          duration === "MONTHLY" ? 0 : getValues("yearlyDiscount"),
+        isDiscounted: duration === "YEARLY" && currentDiscount > 0,
+        discountPercent: duration === "MONTHLY" ? 0 : currentDiscount,
         isActive,
       };
 
@@ -214,7 +216,7 @@ const PlanConfiguration: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 items-center">
+            <div className="grid grid-cols-3 gap-4 items-center mx-2">
               <Controller
                 name="yearlyPrice"
                 control={control}
@@ -243,7 +245,7 @@ const PlanConfiguration: React.FC = () => {
               />
               <div>
                 <div className="text-sm text-muted-foreground">Final Price</div>
-                <div className="font-semibold">
+                <div className="font-semibold ">
                   ${yearlyFinalPrice.toFixed(2)}
                 </div>
               </div>
