@@ -46,7 +46,7 @@ export const SubscriptionBreakdown = ({ monthlyUsers, yearlyUsers }: any) => {
       <h3 className="text-lg text-gray-900 mb-4">Subscription Breakdown</h3>
 
       {/* Fully responsive height */}
-      <div className="w-full h-[220px] sm:h-[260px] md:h-[300px] lg:h-[320px] flex items-center justify-center">
+      <div className="w-full h-[220px] sm:h-[260px] md:h-[300px] lg:h-80 flex items-center justify-center">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
