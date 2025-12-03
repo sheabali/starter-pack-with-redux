@@ -17,15 +17,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-interface BPTableProps<TData, TValue> {
+interface NRTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  emptyMessage?: string;
 }
 
 export function NRTable<TData, TValue>({
   columns,
   data,
-}: BPTableProps<TData, TValue>) {
+  emptyMessage = "No results.",
+}: NRTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
@@ -35,16 +37,13 @@ export function NRTable<TData, TValue>({
   return (
     <div className="my-5">
       <Table>
-        <TableHeader>
-          {table?.getHeaderGroups().map((headerGroup) => (
-            <TableRow
-              key={headerGroup.id}
-              className="bg-gray-300 rounded-xl  text-gray-500"
-            >
+        <TableHeader className="bg-gray-100 my-16">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <TableHead
                   key={header.id}
-                  className="py-4  text-sm font-medium text-gray-600 first:rounded-l-xl last:rounded-r-xl"
+                  className="py-6 text-md font-semibold text-gray-600 first:rounded-l-xl last:rounded-r-xl"
                 >
                   {header.isPlaceholder
                     ? null
@@ -66,7 +65,7 @@ export function NRTable<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell className="py-[30px] text-black " key={cell.id}>
+                  <TableCell className="py-6 text-black" key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
@@ -75,7 +74,7 @@ export function NRTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                {emptyMessage}
               </TableCell>
             </TableRow>
           )}

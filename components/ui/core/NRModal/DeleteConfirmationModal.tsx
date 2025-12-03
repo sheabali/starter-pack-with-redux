@@ -1,13 +1,13 @@
-import React from 'react';
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import React from "react";
 
 interface DeleteModalProps {
   name: string | null;
@@ -28,7 +28,7 @@ const DeleteConfirmationModal: React.FC<DeleteModalProps> = ({
         <DialogHeader>
           <DialogTitle>Delete Item</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete{' '}
+            Are you sure you want to delete{" "}
             <span className="font-semibold text-red-500">{name}</span>? This
             action cannot be undone.
           </DialogDescription>
