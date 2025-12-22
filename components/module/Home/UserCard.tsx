@@ -29,22 +29,24 @@ const dammyUsers = [
 ];
 
 const UserCard = () => (
-  <Marquee gradient={true} pauseOnHover={true} speed={50}>
-    <div className="flex gap-2 py-10">
-      {" "}
-      {dammyUsers.map((user, index) => (
-        <div key={index} className="flex items-center gap-4 ms-10">
-          <Image
-            src={user.avatar}
-            alt="User Avatar"
-            width={350}
-            height={350}
-            className="rounded-3xl"
-          />
-        </div>
-      ))}
-    </div>
-  </Marquee>
+  <div className="relative ">
+    <Marquee gradient={true} pauseOnHover={true} speed={50}>
+      <div className="flex gap-2 py-10">
+        {" "}
+        {dammyUsers.map((user, index) => (
+          <div key={index} className="flex items-center gap-4 ms-10">
+            <Image
+              src={user.avatar}
+              alt="User Avatar"
+              width={350}
+              height={350}
+              className="rounded-3xl"
+            />
+          </div>
+        ))}
+      </div>
+    </Marquee>
+  </div>
 );
 
 export default UserCard;

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import EventSearch from "../EventSearch";
 import EventsCard from "./EventsCard";
 
 const users = [
@@ -86,6 +87,7 @@ const Events = () => {
 
   return (
     <div>
+      <EventSearch />
       <div className="text-center px-4 sm:px-8 lg:px-16 py-8 mt-10">
         <h2 className="text-5xl font-semibold flex flex-wrap items-center justify-center gap-4 lg:justify-center">
           <span>Events that</span>

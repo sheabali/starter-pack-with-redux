@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import EventSearch from "./EventSearch";
 import UserCard from "./UserCard";
 
 const HeroSection = () => {
@@ -18,7 +19,9 @@ const HeroSection = () => {
           </Button>
         </div>
       </div>
-      <UserCard />
+      <div>
+        <UserCard />
+      </div>
     </div>
   );
 };
