@@ -3,6 +3,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -66,31 +68,39 @@ export default function Navbar() {
         }`}
       >
         <div className="mx-auto flex items-center justify-between py-3 px-4 lg:px-6 max-w-7xl">
-          <div className="shrink-0 transition-transform duration-200 hover:scale-105">
-            <span className="text-2xl font-bold">Logo</span>
-          </div>
-
-          <div className="hidden lg:flex items-center gap-8 bg-white rounded-4xl py-2 px-20">
-            {navItems.map((item, idx) => (
-              <button
-                key={idx}
-                onClick={() => handleNavigation(item.href)}
-                className={`py-3 px-4 rounded-full transition-all duration-200 active:scale-95 ${
-                  isActive(item.href)
-                    ? "underline underline-offset-6 decoration-2 text-black"
-                    : "hover:bg-gray-100"
-                }`}
-                aria-current={isActive(item.href) ? "page" : undefined}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="hidden lg:block">
-            <Button variant="default" className="gap-2 py-6">
-              Become a Member
-            </Button>
+          <div className="hidden lg:flex items-center gap-32 bg-white rounded-4xl py-2 px-20">
+            <div className="shrink-0 transition-transform duration-200 hover:scale-105">
+              <Link href="/">
+                <Image
+                  src="/bpc_logo.png"
+                  alt="Logo"
+                  width={100}
+                  height={100}
+                  className="object-contain rounded-2xl"
+                />
+              </Link>
+            </div>
+            <div>
+              {navItems.map((item, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleNavigation(item.href)}
+                  className={`py-3 px-5 rounded-full transition-all duration-200 active:scale-95 ${
+                    isActive(item.href)
+                      ? "underline underline-offset-6 decoration-2 text-black"
+                      : "hover:bg-gray-100"
+                  }`}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+            <div className="hidden lg:block">
+              <Button variant="default" className="gap-2 py-6">
+                Become a Member
+              </Button>
+            </div>
           </div>
 
           <div className="lg:hidden">
@@ -115,7 +125,13 @@ export default function Navbar() {
       >
         {/* Sidebar Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-gray-200/50">
-          <span className="text-2xl font-bold">Logo</span>
+          <Image
+            src="/bpc_logo.png"
+            alt="Logo"
+            width={100}
+            height={100}
+            className="object-contain"
+          />
           <button
             onClick={() => setSidebarOpen(false)}
             className="p-2 hover:bg-gray-100 rounded-xl transition-all duration-200 active:scale-95"
