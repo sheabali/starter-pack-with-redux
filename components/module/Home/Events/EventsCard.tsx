@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Clock, MapPin, Ticket } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const EventsCard = ({ event }: { event?: any }) => {
   const eventData = event;
@@ -42,9 +43,12 @@ const EventsCard = ({ event }: { event?: any }) => {
           </div>
         </div>
 
-        <button className="  bg-pink-200 hover:bg-pink-300 text-black font-medium py-3 px-6 rounded-full transition-colors duration-200">
-          Register Now
-        </button>
+        <Link href={`/events/${eventData?.id}`} className="btn w-full">
+          {" "}
+          <button className="  bg-pink-200 hover:bg-pink-300 text-black font-medium py-3 px-6 rounded-full transition-colors duration-200">
+            Register Now
+          </button>
+        </Link>
       </div>
     </div>
   );
