@@ -1,26 +1,39 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import PHInput from "@/components/form/NRInput";
 import { Button } from "@/components/ui/button";
 import { useLoginMutation } from "@/redux/api/authApi";
+import { setUser } from "@/redux/features/authSlice";
+import { useAppDispatch } from "@/redux/hooks";
+
+import { setCookie } from "@/src/utils/cookies";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 type LoginFormValues = {
   email: string;
   password: string;
 };
+interface CustomJwtPayload extends JwtPayload {
+  role: string; // Add the role property here
+}
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+  password: z.string().min(4, "Password must be at least 4 characters"),
 });
 
 const LoginPage = () => {
-  const [login, { isLoading }] = useLoginMutation();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const [login, { isLoading }] = useLoginMutation() as any;
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(schema),
@@ -31,8 +44,31 @@ const LoginPage = () => {
   });
 
   const onSubmit = async (data: LoginFormValues) => {
-    console.log("Login Data:", data);
-    // await login(data);
+    try {
+      const res = await login(data).unwrap();
+
+      if (res.success) {
+        const token = res.data.token;
+
+        setCookie(token);
+
+        const user = jwtDecode<CustomJwtPayload>(token);
+
+        dispatch(setUser({ token, user }));
+
+        toast.success(res.message || "Login successful!");
+
+        if (user?.role === "ADMIN") {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/");
+        }
+      } else {
+        toast.error(res.message || "Login failed");
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Something went wrong");
+    }
   };
 
   return (
@@ -92,10 +128,10 @@ const LoginPage = () => {
 
               <Button
                 type="submit"
-                className="w-full py-6 font-semibold"
                 disabled={isLoading}
+                className="w-full py-6 font-semibold"
               >
-                {isLoading ? "Logging in..." : "Log In"}
+                {isLoading ? "Loading..." : "Sign In"}
               </Button>
             </form>
           </FormProvider>
